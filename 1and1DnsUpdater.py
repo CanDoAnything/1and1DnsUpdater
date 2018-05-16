@@ -47,6 +47,7 @@ with requests.Session() as s:
         '__sendingdata':'1',
         'oaologin.username': secrets.domainName,
         'oaologin.password': secrets.pw,
+        'oaologin.rememberme': 'true',
         'oaologin.csrf': csrf,
         'oaologin.fp': fp
     }
