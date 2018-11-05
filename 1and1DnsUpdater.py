@@ -22,8 +22,11 @@ else:
     sys.exit()
 
 userAgent = r"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36"
+#userAgent = r"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"
 
-loginUrl = r'https://account.ionos.com'
+
+
+loginUrl = r'https://login.ionos.com'
 
               
 headers = {
@@ -39,17 +42,22 @@ with requests.Session() as s:
     f.close()    
 
     pq = PyQuery(loginPage.text)
-    csrf = pq('#login-form > input[type="hidden"]:nth-child(4)').attr('value')
-    fp = pq('#login-form-fp').attr('value')
+    #csrf = pq('#login-form > input[type="hidden"]:nth-child(4)').attr('value')#content > div > div > div:nth-child(9) > div:nth-child(1) > div > form > input[type="hidden"]:nth-child(6)
+    csrf = pq('#content > div > div > div:nth-child(9) > div:nth-child(1) > div > form > input[type="hidden"]:nth-child(6)').attr('value')
+    #fp = pq('#login-form-fp').attr('value')
+    fp = pq('#content > div > div > div:nth-child(9) > div:nth-child(1) > div > form > input[type="hidden"]:nth-child(3)').attr('value')
+    fp = ''
 
     loginPayload = {
         '__lf': 'login',
         '__sendingdata':'1',
+        'oaologin.fp': fp,
+        'oaologin.autofillUsername' :'',
+        'oaologin.autofillPassword' : '',
+        'oaologin.csrf': csrf,
         'oaologin.username': secrets.domainName,
         'oaologin.password': secrets.pw,
-        'oaologin.rememberme': 'true',
-        'oaologin.csrf': csrf,
-        'oaologin.fp': fp
+        'oaologin.rememberme': 'true'
     }
 
     print('Posting back login info')
