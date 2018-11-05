@@ -23,7 +23,7 @@ else:
 
 userAgent = r"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36"
 
-loginUrl = r'https://account.1and1.com'
+loginUrl = r'https://account.ionos.com'
 
               
 headers = {
