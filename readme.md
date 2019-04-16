@@ -1,4 +1,5 @@
-# 1 and 1 DNS Updater
+
+# IONOS DNS Updater
 
 I created this so I would be able to automatically update my DNS settings for a 1and1 hosted domain to be somewhat synced up to my home IP address. 
 
