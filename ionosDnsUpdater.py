@@ -6,6 +6,7 @@ import os
 import secrets
 import sys
 
+os.chdir(sys.path[0])
 
 
 fn = os.getcwd() + r'/' + '1-1_loginPage.html'
@@ -40,7 +41,7 @@ except:
 publicIp = requests.get('https://api.ipify.org').text
 
 if publicIp != lastKnownIonosEntry:
-    print("last known IONOS ip entry doesn't match, will update")
+    print(datetime.today().strftime('%Y-%m-%d-%H:%M:%S') +" Last known IONOS ip entry doesn't match, will update")
 else:
     print("The last known IONOS ip entry matches your public IP address. If you want to force an update to IONOS, delete the file 'lastKnownIonosEntry.txt'. Now Exiting...")
     sys.exit()
@@ -50,7 +51,7 @@ userAgent = r"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 
 fn = os.getcwd() + r'/' + 'account-locked'
 if os.path.exists(fn):
-    print("your account is locked. Delete the 'account-locked' file once you unlock your account...exiting")
+    print(datetime.today().strftime('%Y-%m-%d-%H:%M:%S') +" your account is locked. Delete the 'account-locked' file once you unlock your account...exiting")
     sys.exit()
 
 
@@ -62,7 +63,7 @@ headers = {
 }
 
 with requests.Session() as s:
-    print('Getting login page payload')
+    print(datetime.today().strftime('%Y-%m-%d-%H:%M:%S') +' ' +'Getting login page payload')
     loginPage = s.get(loginUrl, headers=headers)
     filePath = os.getcwd() + r'/' + '1-1_loginPage.html'
     f = open(filePath, 'w')
@@ -89,7 +90,7 @@ with requests.Session() as s:
         # '__SBMT:d0e799d0':''
     }
 
-    print('Posting back login info')
+    print(datetime.today().strftime('%Y-%m-%d-%H:%M:%S') +' ' +'Posting back login info')
     welcomePage = s.post(loginUrl, data=loginPayload, headers=headers)
 
 
@@ -104,7 +105,7 @@ with requests.Session() as s:
     elif 'zip code of your customer address' in welcomePage.text:
         additionalData = secrets.zip
     elif 'account-locked' in welcomePage.text:
-        print('Looks like your account is locked, requesting unlock email')
+        print(datetime.today().strftime('%Y-%m-%d-%H:%M:%S') +' ' +'Looks like your account is locked, requesting unlock email')
         loginPayload = {
             '__lf': 'login',
             '__sendingdata':'1',
@@ -118,7 +119,7 @@ with requests.Session() as s:
             'email.sendUnlockEmail': 'true'
         }
         s.post(loginUrl + '/account-locked', data=loginPayload, headers=headers)
-        print('Check your email and try again later.')
+        print(datetime.today().strftime('%Y-%m-%d-%H:%M:%S') +' ' +'Check your email and try again later.')
         filePath = os.getcwd() + r'/' + 'account-locked'
         f = open(filePath, 'w')
         f.write('your account is locked, this wont run again until you delete this file')
@@ -132,7 +133,7 @@ with requests.Session() as s:
         f.write(welcomePage.text)
         f.close()  
     else:
-        print('Ionos is doing a robot check...good thing you\'re a klever robot. Posting back additional data: ' + additionalData)
+        print(datetime.today().strftime('%Y-%m-%d-%H:%M:%S') +' ' +'Ionos is doing a robot check...good thing you\'re a klever robot. Posting back additional data: ' + additionalData)
         filePath = os.getcwd() + r'/' + '1-2_loginPageRobotCheck.html'
         f = open(filePath, 'w')
         f.write(welcomePage.text)
@@ -164,7 +165,7 @@ with requests.Session() as s:
         f.write(robotCheck.text)
         f.close()  
 
-    print('Getting dns settings from IONOS')
+    print(datetime.today().strftime('%Y-%m-%d-%H:%M:%S') +' ' +'Getting dns settings from IONOS')
     dnsEditPage = s.get(secrets.editPageURL, headers=headers)
     filePath = os.getcwd() + r'/' + '3-dnsEditPage.html'
     f = open(filePath, 'w')
@@ -175,7 +176,7 @@ with requests.Session() as s:
     oneAnd1Ip = pq2('#recordValue').attr('value')
     
     if  oneAnd1Ip is None:
-        print("problem getting IP from IONOS, try manually logging in.")
+        print(datetime.today().strftime('%Y-%m-%d-%H:%M:%S') +' ' +"problem getting IP from IONOS, try manually logging in.")
         sys.exit()
 
     filePath = os.getcwd() + r'/' + 'lastKnownIonosEntry.txt'
@@ -189,11 +190,11 @@ with requests.Session() as s:
     f.close()
 
 
-    print('My public IP address is:', publicIp)
-    print('The DNS entry on IONOS is:', oneAnd1Ip)
+    print(datetime.today().strftime('%Y-%m-%d-%H:%M:%S') +' ' +'My public IP address is:', publicIp)
+    print(datetime.today().strftime('%Y-%m-%d-%H:%M:%S') +' ' +'The DNS entry on IONOS is:', oneAnd1Ip)
 
     if publicIp != oneAnd1Ip:
-        print("IP addresses differ, updating IONOS")
+        print(datetime.today().strftime('%Y-%m-%d-%H:%M:%S') +' ' +"IP addresses differ, updating IONOS")
         editDnsPayload = {
             '__sendingdata':'1',
             'record.forWwwSubdomain':'true',
@@ -207,6 +208,6 @@ with requests.Session() as s:
         f.write(dnsPostPage.text)
         f.close()  
     else:
-        print("IP Addresses are the same, no further action required.")
-    print('done')
+        print(datetime.today().strftime('%Y-%m-%d-%H:%M:%S') +' ' +"IP Addresses are the same, no further action required.")
+    print(datetime.today().strftime('%Y-%m-%d-%H:%M:%S') +' ' +'done')
    
